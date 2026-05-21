@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { certificadosApi } from '../services/api';
-import TablaGenerica from '../components/comunes/TablaGenerica';
-import ModalConfirmacion from '../components/comunes/ModalConfirmacion';
-import Boton from '../components/comunes/Boton';
-import { ESTADOS_CERTIFICADO, MENSAJES } from '../constants';
+import { certificadosApi } from '../servicios/api';
+import TablaGenerica from '../componentes/reutilizables/TablaGenerica';
+import ModalConfirmacion from '../componentes/reutilizables/ModalConfirmacion';
+import Boton from '../componentes/reutilizables/Boton';
+import { ESTADOS_CERTIFICADO, MENSAJES } from '../constantes';
 
 const COLUMNAS = [
   { clave: 'numeroSerie', etiqueta: 'Serie' },
@@ -45,18 +45,27 @@ function Certificados() {
   const [idSeleccionado, setIdSeleccionado] = useState(null);
   const [confirmando, setConfirmando] = useState(false);
 
-  const cargarDatos = async () => {
+  useEffect(() => {
+    (async () => {
+      try {
+        const respuesta = await certificadosApi.obtenerTodos();
+        setDatos(respuesta.data);
+      } catch {
+        alert(MENSAJES.ERROR_CARGA);
+      } finally {
+        setCargando(false);
+      }
+    })();
+  }, []);
+
+  const recargarDatos = async () => {
     try {
       const respuesta = await certificadosApi.obtenerTodos();
       setDatos(respuesta.data);
     } catch {
       alert(MENSAJES.ERROR_CARGA);
-    } finally {
-      setCargando(false);
     }
   };
-
-  useEffect(() => { cargarDatos(); }, []);
 
   const abrirModalEliminar = (id) => {
     setIdSeleccionado(id);
@@ -69,7 +78,7 @@ function Certificados() {
       await certificadosApi.eliminar(idSeleccionado);
       setModalAbierto(false);
       setIdSeleccionado(null);
-      cargarDatos();
+      recargarDatos();
     } catch {
       alert('Error al eliminar');
     } finally {
@@ -119,7 +128,7 @@ function Certificados() {
       />
 
       <div style={{ marginTop: '12px' }}>
-        <Boton onClick={cargarDatos} variante="secundario">Refrescar</Boton>
+        <Boton onClick={recargarDatos} variante="secundario">Refrescar</Boton>
       </div>
 
       <ModalConfirmacion

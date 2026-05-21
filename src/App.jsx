@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
-import Voluntarios from './pages/Voluntarios';
-import Horas from './pages/Horas';
-import Certificados from './pages/Certificados';
+import Voluntarios from './paginas/Voluntarios';
+import Horas from './paginas/Horas';
+import Certificados from './paginas/Certificados';
 
 function App() {
   return (

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { voluntariosApi } from '../services/api';
-import TablaGenerica from '../components/comunes/TablaGenerica';
-import Buscador from '../components/comunes/Buscador';
-import ModalConfirmacion from '../components/comunes/ModalConfirmacion';
-import Boton from '../components/comunes/Boton';
-import TarjetaInformacion from '../components/comunes/TarjetaInformacion';
-import { ESTADOS_VOLUNTARIO, MENSAJES } from '../constants';
+import { voluntariosApi } from '../servicios/api';
+import TablaGenerica from '../componentes/reutilizables/TablaGenerica';
+import Buscador from '../componentes/reutilizables/Buscador';
+import ModalConfirmacion from '../componentes/reutilizables/ModalConfirmacion';
+import Boton from '../componentes/reutilizables/Boton';
+import TarjetaInformacion from '../componentes/reutilizables/TarjetaInformacion';
+import { ESTADOS_VOLUNTARIO, MENSAJES } from '../constantes';
 
 const COLUMNAS = [
   { clave: 'nombre', etiqueta: 'Nombre' },
@@ -44,20 +44,28 @@ function Voluntarios() {
   const [modalAbierto, setModalAbierto] = useState(false);
   const [idSeleccionado, setIdSeleccionado] = useState(null);
   const [confirmando, setConfirmando] = useState(false);
-  const [totalHoras, setTotalHoras] = useState(0);
 
-  const cargarDatos = async () => {
+  useEffect(() => {
+    (async () => {
+      try {
+        const respuesta = await voluntariosApi.obtenerTodos();
+        setDatos(respuesta.data);
+      } catch {
+        alert(MENSAJES.ERROR_CARGA);
+      } finally {
+        setCargando(false);
+      }
+    })();
+  }, []);
+
+  const recargarDatos = async () => {
     try {
       const respuesta = await voluntariosApi.obtenerTodos();
       setDatos(respuesta.data);
     } catch {
       alert(MENSAJES.ERROR_CARGA);
-    } finally {
-      setCargando(false);
     }
   };
-
-  useEffect(() => { cargarDatos(); }, []);
 
   const datosFiltrados = busqueda
     ? datos.filter((v) =>
@@ -76,7 +84,7 @@ function Voluntarios() {
       await voluntariosApi.eliminar(idSeleccionado);
       setModalAbierto(false);
       setIdSeleccionado(null);
-      cargarDatos();
+      recargarDatos();
     } catch {
       alert('Error al eliminar');
     } finally {
@@ -84,9 +92,8 @@ function Voluntarios() {
     }
   };
 
-  const calcularTotalHoras = async () => {
+  const calcularTotalHoras = () => {
     const total = datos.reduce((acc, v) => acc + Number(v.horasTotales), 0);
-    setTotalHoras(total);
     alert(`Total de horas registradas: ${total}`);
   };
 

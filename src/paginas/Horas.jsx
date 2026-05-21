@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { horasApi } from '../services/api';
-import TablaGenerica from '../components/comunes/TablaGenerica';
-import ModalConfirmacion from '../components/comunes/ModalConfirmacion';
-import { MENSAJES } from '../constants';
+import { horasApi } from '../servicios/api';
+import TablaGenerica from '../componentes/reutilizables/TablaGenerica';
+import ModalConfirmacion from '../componentes/reutilizables/ModalConfirmacion';
+import { MENSAJES } from '../constantes';
 
 const COLUMNAS = [
   { clave: 'nombreVoluntario', etiqueta: 'Voluntario' },
@@ -23,18 +23,27 @@ function Horas() {
   const [idSeleccionado, setIdSeleccionado] = useState(null);
   const [confirmando, setConfirmando] = useState(false);
 
-  const cargarDatos = async () => {
+  useEffect(() => {
+    (async () => {
+      try {
+        const respuesta = await horasApi.obtenerTodos();
+        setDatos(respuesta.data);
+      } catch {
+        alert(MENSAJES.ERROR_CARGA);
+      } finally {
+        setCargando(false);
+      }
+    })();
+  }, []);
+
+  const recargarDatos = async () => {
     try {
       const respuesta = await horasApi.obtenerTodos();
       setDatos(respuesta.data);
     } catch {
       alert(MENSAJES.ERROR_CARGA);
-    } finally {
-      setCargando(false);
     }
   };
-
-  useEffect(() => { cargarDatos(); }, []);
 
   const totalHoras = datos.reduce((acc, h) => acc + Number(h.horas), 0);
 
@@ -49,7 +58,7 @@ function Horas() {
       await horasApi.eliminar(idSeleccionado);
       setModalAbierto(false);
       setIdSeleccionado(null);
-      cargarDatos();
+      recargarDatos();
     } catch {
       alert('Error al eliminar');
     } finally {
