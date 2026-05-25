@@ -18,6 +18,15 @@ export const PAGINACION = {
   PAGINA_INICIAL: 1
 };
 
+export const ESTADOS_ACTIVIDAD = {
+  Planificada: { label: 'Planificada', color: '#9ca3af' },
+  Abierta: { label: 'Abierta', color: '#22c55e' },
+  EnProgreso: { label: 'En Progreso', color: '#3b82f6' },
+  Completada: { label: 'Completada', color: '#8b5cf6' },
+  Cancelada: { label: 'Cancelada', color: '#ef4444' },
+  Cerrada: { label: 'Cerrada', color: '#f59e0b' }
+};
+
 export const MENSAJES = {
   CONFIRMAR_ELIMINAR: '¿Estás seguro de eliminar este registro?',
   ERROR_CARGA: 'Error al cargar los datos',
