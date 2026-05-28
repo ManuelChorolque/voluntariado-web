@@ -42,14 +42,14 @@ function DashboardAdmin() {
 
   return (
     <div>
-      <h2 style={{ margin: '0 0 4px' }}>Panel de administración</h2>
-      <p style={{ margin: '0 0 24px', color: '#6b7280', fontSize: '14px' }}>
+      <h2 className="m-0 mb-1 text-lg">Panel de administración</h2>
+      <p className="m-0 mb-6 text-gray-500 text-sm">
         Control total del sistema, {usuario.nombre}
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '32px' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
         {tarjetas.map((t) => (
-          <div key={t.titulo} style={{ cursor: 'pointer' }} onClick={() => navigate(t.ruta)}>
+          <div key={t.titulo} className="cursor-pointer" onClick={() => navigate(t.ruta)}>
             <TarjetaInformacion
               titulo={t.titulo}
               campos={[{ etiqueta: t.label, valor: cargando ? '...' : t.valor }]}
@@ -60,8 +60,8 @@ function DashboardAdmin() {
       </div>
 
       <section>
-        <h3 style={{ margin: '0 0 16px', fontSize: '18px', color: '#111827' }}>Acciones rápidas</h3>
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+        <h3 className="m-0 mb-4 text-lg text-gray-900">Acciones rápidas</h3>
+        <div className="flex gap-3 flex-wrap">
           <Boton onClick={() => navigate('/organizaciones')}>Gestionar Organizaciones</Boton>
           <Boton variante="secundario" onClick={() => navigate('/actividades')}>Ver Actividades</Boton>
           <Boton variante="secundario" onClick={() => navigate('/voluntarios')}>Ver Voluntarios</Boton>

@@ -1,29 +1,23 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@import "tailwindcss";
+
+@theme {
+  --color-azul: #1e3a5f;
+  --color-azul-claro: #93c5fd;
+  --color-texto: #111827;
+  --color-gris: #6b7280;
+  --color-gris-claro: #f9fafb;
+  --color-borde: #e5e7eb;
+  --color-primario: #3b82f6;
+  --color-secundario: #6b7280;
+  --color-peligro: #ef4444;
+  --color-exito: #22c55e;
 }
 
 body {
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-  font-size: 14px;
-  color: #111827;
-  background: #f9fafb;
 }
 
-#root {
-  min-height: 100vh;
-}
-
-a {
-  color: #3b82f6;
-}
-
-input:focus {
-  border-color: #3b82f6 !important;
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-primario) !important;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-}
-
-button {
-  font-family: inherit;
 }

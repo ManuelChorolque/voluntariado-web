@@ -5,30 +5,16 @@ function ModalConfirmacion({ abierto, titulo, mensaje, onConfirmar, onCancelar, 
 
   return (
     <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        background: 'rgba(0,0,0,0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000
-      }}
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
       onClick={onCancelar}
     >
       <div
-        style={{
-          background: '#fff',
-          borderRadius: '10px',
-          padding: '24px',
-          width: '400px',
-          maxWidth: '90%'
-        }}
+        className="bg-white rounded-lg p-6 w-[400px] max-w-[90%]"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 style={{ margin: '0 0 8px', color: '#111827' }}>{titulo}</h3>
-        <p style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 20px' }}>{mensaje}</p>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+        <h3 className="m-0 mb-2 text-gray-900 text-lg">{titulo}</h3>
+        <p className="text-gray-500 text-sm m-0 mb-5">{mensaje}</p>
+        <div className="flex gap-2.5 justify-end">
           <Boton variante="secundario" onClick={onCancelar} deshabilitado={confirmando}>
             Cancelar
           </Boton>

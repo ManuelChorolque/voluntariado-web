@@ -22,14 +22,8 @@ const COLUMNAS = [
       const config = ESTADOS_CERTIFICADO[valor] ?? { label: valor, color: '#6b7280' };
       return (
         <span
-          style={{
-            background: config.color + '20',
-            color: config.color,
-            padding: '2px 10px',
-            borderRadius: '12px',
-            fontSize: '12px',
-            fontWeight: 600
-          }}
+          className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold"
+          style={{ background: config.color + '20', color: config.color }}
         >
           {config.label}
         </span>
@@ -104,15 +98,8 @@ function Certificados() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '20px'
-        }}
-      >
-        <h2 style={{ margin: 0 }}>Certificados</h2>
+      <div className="flex justify-between items-center mb-5">
+        <h2 className="m-0">Certificados</h2>
       </div>
 
       <TablaGenerica
@@ -127,7 +114,7 @@ function Certificados() {
         )}
       />
 
-      <div style={{ marginTop: '12px' }}>
+      <div className="mt-3">
         <Boton onClick={recargarDatos} variante="secundario">Refrescar</Boton>
       </div>
 

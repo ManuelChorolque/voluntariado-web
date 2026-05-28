@@ -1,29 +1,18 @@
 const VARIANTES = {
-  primario: { bg: '#3b82f6', hover: '#2563eb' },
-  secundario: { bg: '#6b7280', hover: '#4b5563' },
-  peligro: { bg: '#ef4444', hover: '#dc2626' }
+  primario: 'bg-blue-500 hover:bg-blue-600',
+  secundario: 'bg-gray-500 hover:bg-gray-600',
+  peligro: 'bg-red-500 hover:bg-red-600'
 };
 
-function Boton({ children, onClick, variante = 'primario', deshabilitado = false, tipo = 'button' }) {
-  const estilo = VARIANTES[variante];
-
+function Boton({ children, onClick, variante = 'primario', deshabilitado = false, tipo = 'button', className = '' }) {
   return (
     <button
       type={tipo}
       onClick={onClick}
       disabled={deshabilitado}
-      style={{
-        padding: '8px 20px',
-        border: 'none',
-        borderRadius: '6px',
-        background: deshabilitado ? '#d1d5db' : estilo.bg,
-        color: '#fff',
-        fontSize: '14px',
-        cursor: deshabilitado ? 'not-allowed' : 'pointer',
-        transition: 'background 0.2s'
-      }}
-      onMouseEnter={(e) => !deshabilitado && (e.target.style.background = estilo.hover)}
-      onMouseLeave={(e) => !deshabilitado && (e.target.style.background = estilo.bg)}
+      className={`px-5 py-2 border-none rounded-md text-white text-sm cursor-pointer transition-colors duration-200 ${
+        deshabilitado ? 'bg-gray-300 cursor-not-allowed' : VARIANTES[variante]
+      } ${className}`}
     >
       {children}
     </button>

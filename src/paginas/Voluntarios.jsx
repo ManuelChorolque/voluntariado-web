@@ -3,7 +3,6 @@ import { voluntariosApi } from '../servicios/api';
 import TablaGenerica from '../componentes/reutilizables/TablaGenerica';
 import Buscador from '../componentes/reutilizables/Buscador';
 import ModalConfirmacion from '../componentes/reutilizables/ModalConfirmacion';
-import Boton from '../componentes/reutilizables/Boton';
 import TarjetaInformacion from '../componentes/reutilizables/TarjetaInformacion';
 import { ESTADOS_VOLUNTARIO, MENSAJES } from '../constantes';
 
@@ -19,14 +18,8 @@ const COLUMNAS = [
       const config = ESTADOS_VOLUNTARIO[valor] ?? { label: valor, color: '#6b7280' };
       return (
         <span
-          style={{
-            background: config.color + '20',
-            color: config.color,
-            padding: '2px 10px',
-            borderRadius: '12px',
-            fontSize: '12px',
-            fontWeight: 600
-          }}
+          className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold"
+          style={{ background: config.color + '20', color: config.color }}
         >
           {config.label}
         </span>
@@ -92,33 +85,14 @@ function Voluntarios() {
     }
   };
 
-  const calcularTotalHoras = () => {
-    const total = datos.reduce((acc, v) => acc + Number(v.horasTotales), 0);
-    alert(`Total de horas registradas: ${total}`);
-  };
-
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '20px',
-          flexWrap: 'wrap',
-          gap: '12px'
-        }}
-      >
-        <h2 style={{ margin: 0 }}>Voluntarios</h2>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <Buscador valor={busqueda} onChange={setBusqueda} placeholder="Buscar voluntario..." />
-          <Boton variante="secundario" onClick={calcularTotalHoras}>
-            Total Horas
-          </Boton>
-        </div>
+      <div className="flex justify-between items-center mb-5 flex-wrap gap-3">
+        <h2 className="m-0">Voluntarios</h2>
+        <Buscador valor={busqueda} onChange={setBusqueda} placeholder="Buscar voluntario..." />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '20px' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
         <TarjetaInformacion
           titulo="Total Voluntarios"
           campos={[{ etiqueta: 'Cantidad', valor: datos.length }]}

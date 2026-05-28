@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { horasApi } from '../servicios/api';
 import TablaGenerica from '../componentes/reutilizables/TablaGenerica';
 import ModalConfirmacion from '../componentes/reutilizables/ModalConfirmacion';
+import Boton from '../componentes/reutilizables/Boton';
 import { MENSAJES } from '../constantes';
 
 const COLUMNAS = [
@@ -19,6 +20,7 @@ const COLUMNAS = [
 function Horas() {
   const [datos, setDatos] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [busqueda, setBusqueda] = useState('');
   const [modalAbierto, setModalAbierto] = useState(false);
   const [idSeleccionado, setIdSeleccionado] = useState(null);
   const [confirmando, setConfirmando] = useState(false);
@@ -45,7 +47,21 @@ function Horas() {
     }
   };
 
-  const totalHoras = datos.reduce((acc, h) => acc + Number(h.horas), 0);
+  const datosFiltrados = useMemo(() => {
+    if (!busqueda) return datos;
+    return datos.filter((h) =>
+      h.nombreVoluntario?.toLowerCase().includes(busqueda.toLowerCase())
+    );
+  }, [datos, busqueda]);
+
+  const totalFiltrado = useMemo(
+    () => datosFiltrados.reduce((acc, h) => acc + Number(h.horas), 0),
+    [datosFiltrados]
+  );
+
+  const calcularTotal = () => {
+    alert(`Total de horas: ${totalFiltrado.toFixed(1)}`);
+  };
 
   const abrirModalEliminar = (id) => {
     setIdSeleccionado(id);
@@ -68,23 +84,29 @@ function Horas() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '20px'
-        }}
-      >
-        <h2 style={{ margin: 0 }}>Horas de Voluntariado</h2>
-        <span style={{ fontSize: '14px', color: '#6b7280' }}>
-          Total: <strong>{totalHoras.toFixed(1)}</strong> horas
+      <div className="flex justify-between items-center mb-5">
+        <h2 className="m-0">Horas de Voluntariado</h2>
+        <span className="text-sm text-gray-500">
+          {busqueda ? 'Filtradas' : 'Total'}: <strong>{totalFiltrado.toFixed(1)}</strong> horas
         </span>
+      </div>
+
+      <div className="flex gap-3 items-center mb-5 flex-wrap">
+        <input
+          type="text"
+          placeholder="Buscar por voluntario..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 min-w-[220px]"
+        />
+        <Boton variante="secundario" onClick={calcularTotal}>
+          Calcular Horas
+        </Boton>
       </div>
 
       <TablaGenerica
         columnas={COLUMNAS}
-        datos={datos}
+        datos={datosFiltrados}
         cargando={cargando}
         alHacerClickEnEliminar={abrirModalEliminar}
       />

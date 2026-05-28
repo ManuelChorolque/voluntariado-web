@@ -26,46 +26,46 @@ function Login() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f4f8' }}>
-      <div style={{ background: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 4px 24px rgba(0,0,0,0.08)', width: '400px', maxWidth: '90%' }}>
-        <h1 style={{ margin: '0 0 4px', color: '#1e3a5f', fontSize: '24px' }}>Voluntariado</h1>
-        <p style={{ margin: '0 0 24px', color: '#6b7280', fontSize: '14px' }}>Inicia sesion para continuar</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-10 rounded-xl shadow-sm w-[400px] max-w-[90%]">
+        <h1 className="m-0 mb-1 text-[#1e3a5f] text-2xl font-bold">Voluntariado</h1>
+        <p className="m-0 mb-6 text-gray-500 text-sm">Inicia sesion para continuar</p>
 
         {error && (
-          <p style={{ background: '#fef2f2', color: '#dc2626', padding: '10px', borderRadius: '6px', fontSize: '14px', marginBottom: '16px' }}>{error}</p>
+          <p className="bg-red-50 text-red-600 p-2.5 rounded-md text-sm mb-4">{error}</p>
         )}
 
         <form onSubmit={manejarSubmit}>
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', marginBottom: '6px', color: '#374151', fontSize: '14px', fontWeight: 500 }}>Email</label>
+          <div className="mb-4">
+            <label className="block mb-1.5 text-gray-700 text-sm font-medium">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box' }}
+              className="w-full px-3 py-2.5 border border-gray-300 rounded-md text-sm box-border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
             />
           </div>
 
-          <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', marginBottom: '6px', color: '#374151', fontSize: '14px', fontWeight: 500 }}>Contrasena</label>
+          <div className="mb-6">
+            <label className="block mb-1.5 text-gray-700 text-sm font-medium">Contrasena</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box' }}
+              className="w-full px-3 py-2.5 border border-gray-300 rounded-md text-sm box-border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
             />
           </div>
 
-          <Boton tipo="submit" deshabilitado={cargando} style={{ width: '100%' }}>
+          <Boton tipo="submit" deshabilitado={cargando} className="w-full">
             {cargando ? 'Ingresando...' : 'Iniciar Sesion'}
           </Boton>
         </form>
 
-        <p style={{ marginTop: '20px', textAlign: 'center', color: '#6b7280', fontSize: '14px' }}>
+        <p className="mt-5 text-center text-gray-500 text-sm">
           ¿No tenes cuenta?{' '}
-          <Link to="/registrar" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 500 }}>Registrate</Link>
+          <Link to="/registrar" className="text-blue-500 no-underline font-medium">Registrate</Link>
         </p>
       </div>
     </div>

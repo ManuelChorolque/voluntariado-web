@@ -6,96 +6,6 @@ import BadgeEstado from '../../componentes/reutilizables/BadgeEstado';
 import ModalForm, { estiloInput, estiloLabel } from '../../componentes/reutilizables/ModalForm';
 import { ESTADOS_ACTIVIDAD } from '../../constantes';
 
-const S = {
-  filtros: {
-    display: 'flex',
-    gap: '12px',
-    alignItems: 'flex-end',
-    flexWrap: 'wrap',
-    marginBottom: '20px',
-    padding: '16px',
-    background: '#fff',
-    borderRadius: '8px',
-    border: '1px solid #e5e7eb'
-  },
-  grupoFiltro: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px'
-  },
-  label: {
-    fontSize: '12px',
-    fontWeight: 600,
-    color: '#374151'
-  },
-  input: {
-    ...estiloInput,
-    width: 'auto',
-    minWidth: '180px'
-  },
-  inputCorto: {
-    ...estiloInput,
-    width: 'auto',
-    minWidth: '140px'
-  },
-  tabla: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    background: '#fff',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    border: '1px solid #e5e7eb'
-  },
-  th: {
-    background: '#f9fafb',
-    padding: '12px 16px',
-    textAlign: 'left',
-    fontSize: '13px',
-    fontWeight: 600,
-    color: '#374151',
-    borderBottom: '2px solid #e5e7eb'
-  },
-  td: {
-    padding: '12px 16px',
-    fontSize: '13px',
-    color: '#4b5563',
-    borderBottom: '1px solid #f3f4f6'
-  },
-  detalleOverlay: {
-    position: 'fixed',
-    inset: 0,
-    background: 'rgba(0,0,0,0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000
-  },
-  detalleCard: {
-    background: '#fff',
-    borderRadius: '12px',
-    padding: '28px',
-    maxWidth: '600px',
-    width: '90%',
-    maxHeight: '90vh',
-    overflowY: 'auto',
-    boxShadow: '0 20px 60px rgba(0,0,0,0.2)'
-  },
-  voluntarioItem: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '10px 14px',
-    background: '#f9fafb',
-    borderRadius: '6px',
-    fontSize: '13px'
-  },
-  grupoBoton: {
-    display: 'flex',
-    gap: '6px',
-    flexWrap: 'wrap'
-  }
-};
-
 function ActividadesOrganizacion() {
   const { usuario } = useAuth();
   const [actividades, setActividades] = useState([]);
@@ -104,7 +14,6 @@ function ActividadesOrganizacion() {
   const [fechaDesde, setFechaDesde] = useState('');
   const [fechaHasta, setFechaHasta] = useState('');
 
-  // Modales
   const [modalCrear, setModalCrear] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [detalleAct, setDetalleAct] = useState(null);
@@ -216,60 +125,60 @@ function ActividadesOrganizacion() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h2 style={{ margin: 0, fontSize: '20px', color: '#111827' }}>Actividades</h2>
+      <div className="flex justify-between items-center mb-5">
+        <h2 className="m-0 text-xl text-gray-900">Actividades</h2>
         <Boton onClick={() => setModalCrear(true)}>Crear Actividad</Boton>
       </div>
 
       {/* Filtros */}
-      <div style={S.filtros}>
-        <div style={S.grupoFiltro}>
-          <label style={S.label}>Buscar por nombre</label>
+      <div className="flex gap-3 items-end flex-wrap mb-5 p-4 bg-white rounded-lg border border-gray-200">
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-semibold text-gray-700">Buscar por nombre</label>
           <input
-            style={S.input}
+            className="border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 min-w-[180px]"
             placeholder="Nombre de la actividad..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
           />
         </div>
-        <div style={S.grupoFiltro}>
-          <label style={S.label}>Desde</label>
-          <input type="date" style={S.inputCorto} value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} />
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-semibold text-gray-700">Desde</label>
+          <input type="date" className="border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 min-w-[140px]" value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} />
         </div>
-        <div style={S.grupoFiltro}>
-          <label style={S.label}>Hasta</label>
-          <input type="date" style={S.inputCorto} value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} />
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-semibold text-gray-700">Hasta</label>
+          <input type="date" className="border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 min-w-[140px]" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} />
         </div>
         <Boton variante="secundario" onClick={cargarDatos}>Buscar</Boton>
       </div>
 
       {/* Tabla */}
       {cargando ? (
-        <p style={{ color: '#6b7280' }}>Cargando...</p>
+        <p className="text-gray-500">Cargando...</p>
       ) : actividades.length === 0 ? (
-        <p style={{ color: '#9ca3af' }}>No se encontraron actividades.</p>
+        <p className="text-gray-400">No se encontraron actividades.</p>
       ) : (
-        <table style={S.tabla}>
+        <table className="w-full border-collapse bg-white rounded-lg overflow-hidden border border-gray-200">
           <thead>
-            <tr>
-              <th style={S.th}>Nombre</th>
-              <th style={S.th}>Fecha Inicio</th>
-              <th style={S.th}>Fecha Fin</th>
-              <th style={S.th}>Cupos</th>
-              <th style={S.th}>Estado</th>
-              <th style={S.th}>Acciones</th>
+            <tr className="bg-gray-50 border-b-2 border-gray-200">
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Nombre</th>
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Fecha Inicio</th>
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Fecha Fin</th>
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Cupos</th>
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Estado</th>
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-700">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {actividades.map((act) => (
-              <tr key={act.id}>
-                <td style={S.td}>{act.nombre}</td>
-                <td style={S.td}>{new Date(act.fechaInicio).toLocaleDateString()}</td>
-                <td style={S.td}>{new Date(act.fechaFin).toLocaleDateString()}</td>
-                <td style={S.td}>{act.voluntariosAsignados}/{act.voluntariosRequeridos}</td>
-                <td style={S.td}><BadgeEstado estado={act.estado} mapa={ESTADOS_ACTIVIDAD} /></td>
-                <td style={S.td}>
-                  <div style={S.grupoBoton}>
+              <tr key={act.id} className="border-b border-gray-100">
+                <td className="px-4 py-3 text-sm text-gray-600">{act.nombre}</td>
+                <td className="px-4 py-3 text-sm text-gray-600">{new Date(act.fechaInicio).toLocaleDateString()}</td>
+                <td className="px-4 py-3 text-sm text-gray-600">{new Date(act.fechaFin).toLocaleDateString()}</td>
+                <td className="px-4 py-3 text-sm text-gray-600">{act.voluntariosAsignados}/{act.voluntariosRequeridos}</td>
+                <td className="px-4 py-3 text-sm text-gray-600"><BadgeEstado estado={act.estado} mapa={ESTADOS_ACTIVIDAD} /></td>
+                <td className="px-4 py-3 text-sm text-gray-600">
+                  <div className="flex gap-1.5 flex-wrap">
                     <Boton variante="secundario" onClick={() => verDetalle(act.id)}>Ver</Boton>
                     {puedeEditar(act.estado) && (
                       <Boton variante="secundario" onClick={() => abrirEditar(act)}>Editar</Boton>
@@ -287,103 +196,103 @@ function ActividadesOrganizacion() {
 
       {/* Modal Crear Actividad */}
       <ModalForm abierto={modalCrear} titulo="Crear Actividad" onCerrar={() => setModalCrear(false)} onSubmit={crearActividad} enviando={enviando}>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Nombre</label>
-          <input style={estiloInput} value={formCrear.nombre} onChange={(e) => setFormCrear({ ...formCrear, nombre: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Nombre</label>
+          <input className={estiloInput} value={formCrear.nombre} onChange={(e) => setFormCrear({ ...formCrear, nombre: e.target.value })} required />
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Descripción</label>
-          <textarea style={{ ...estiloInput, minHeight: '80px' }} value={formCrear.descripcion} onChange={(e) => setFormCrear({ ...formCrear, descripcion: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Descripción</label>
+          <textarea className={`${estiloInput} min-h-[80px]`} value={formCrear.descripcion} onChange={(e) => setFormCrear({ ...formCrear, descripcion: e.target.value })} required />
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Ubicación</label>
-          <input style={estiloInput} value={formCrear.ubicacion} onChange={(e) => setFormCrear({ ...formCrear, ubicacion: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Ubicación</label>
+          <input className={estiloInput} value={formCrear.ubicacion} onChange={(e) => setFormCrear({ ...formCrear, ubicacion: e.target.value })} required />
         </div>
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={estiloLabel}>Fecha inicio</label>
-            <input type="date" style={estiloInput} value={formCrear.fechaInicio} onChange={(e) => setFormCrear({ ...formCrear, fechaInicio: e.target.value })} required />
+        <div className="flex gap-3 mb-3.5">
+          <div className="flex-1">
+            <label className={estiloLabel}>Fecha inicio</label>
+            <input type="date" className={estiloInput} value={formCrear.fechaInicio} onChange={(e) => setFormCrear({ ...formCrear, fechaInicio: e.target.value })} required />
           </div>
-          <div style={{ flex: 1 }}>
-            <label style={estiloLabel}>Fecha fin</label>
-            <input type="date" style={estiloInput} value={formCrear.fechaFin} onChange={(e) => setFormCrear({ ...formCrear, fechaFin: e.target.value })} required />
+          <div className="flex-1">
+            <label className={estiloLabel}>Fecha fin</label>
+            <input type="date" className={estiloInput} value={formCrear.fechaFin} onChange={(e) => setFormCrear({ ...formCrear, fechaFin: e.target.value })} required />
           </div>
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Voluntarios requeridos</label>
-          <input type="number" min="1" style={estiloInput} value={formCrear.voluntariosRequeridos} onChange={(e) => setFormCrear({ ...formCrear, voluntariosRequeridos: Number(e.target.value) })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Voluntarios requeridos</label>
+          <input type="number" min="1" className={estiloInput} value={formCrear.voluntariosRequeridos} onChange={(e) => setFormCrear({ ...formCrear, voluntariosRequeridos: Number(e.target.value) })} required />
         </div>
       </ModalForm>
 
       {/* Modal Editar Actividad */}
       <ModalForm abierto={modalEditar} titulo="Editar Actividad" onCerrar={() => setModalEditar(false)} onSubmit={guardarEditar} enviando={enviando}>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Nombre</label>
-          <input style={estiloInput} value={formEditar.nombre} onChange={(e) => setFormEditar({ ...formEditar, nombre: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Nombre</label>
+          <input className={estiloInput} value={formEditar.nombre} onChange={(e) => setFormEditar({ ...formEditar, nombre: e.target.value })} required />
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Descripción</label>
-          <textarea style={{ ...estiloInput, minHeight: '80px' }} value={formEditar.descripcion} onChange={(e) => setFormEditar({ ...formEditar, descripcion: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Descripción</label>
+          <textarea className={`${estiloInput} min-h-[80px]`} value={formEditar.descripcion} onChange={(e) => setFormEditar({ ...formEditar, descripcion: e.target.value })} required />
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Ubicación</label>
-          <input style={estiloInput} value={formEditar.ubicacion} onChange={(e) => setFormEditar({ ...formEditar, ubicacion: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Ubicación</label>
+          <input className={estiloInput} value={formEditar.ubicacion} onChange={(e) => setFormEditar({ ...formEditar, ubicacion: e.target.value })} required />
         </div>
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={estiloLabel}>Fecha inicio</label>
-            <input type="date" style={estiloInput} value={formEditar.fechaInicio} onChange={(e) => setFormEditar({ ...formEditar, fechaInicio: e.target.value })} required />
+        <div className="flex gap-3 mb-3.5">
+          <div className="flex-1">
+            <label className={estiloLabel}>Fecha inicio</label>
+            <input type="date" className={estiloInput} value={formEditar.fechaInicio} onChange={(e) => setFormEditar({ ...formEditar, fechaInicio: e.target.value })} required />
           </div>
-          <div style={{ flex: 1 }}>
-            <label style={estiloLabel}>Fecha fin</label>
-            <input type="date" style={estiloInput} value={formEditar.fechaFin} onChange={(e) => setFormEditar({ ...formEditar, fechaFin: e.target.value })} required />
+          <div className="flex-1">
+            <label className={estiloLabel}>Fecha fin</label>
+            <input type="date" className={estiloInput} value={formEditar.fechaFin} onChange={(e) => setFormEditar({ ...formEditar, fechaFin: e.target.value })} required />
           </div>
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Voluntarios requeridos</label>
-          <input type="number" min="1" style={estiloInput} value={formEditar.voluntariosRequeridos} onChange={(e) => setFormEditar({ ...formEditar, voluntariosRequeridos: Number(e.target.value) })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Voluntarios requeridos</label>
+          <input type="number" min="1" className={estiloInput} value={formEditar.voluntariosRequeridos} onChange={(e) => setFormEditar({ ...formEditar, voluntariosRequeridos: Number(e.target.value) })} required />
         </div>
       </ModalForm>
 
       {/* Modal Detalle */}
       {detalleAct && (
-        <div style={S.detalleOverlay} onClick={() => setDetalleAct(null)}>
-          <div style={S.detalleCard} onClick={(e) => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setDetalleAct(null)}>
+          <div className="bg-white rounded-lg p-7 max-w-[600px] w-[90%] max-h-[90vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-start mb-4">
               <div>
-                <h3 style={{ margin: 0, fontSize: '18px', color: '#111827' }}>{detalleAct.nombre}</h3>
-                <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#6b7280' }}>{detalleAct.nombreOrganizacion}</p>
+                <h3 className="m-0 text-lg text-gray-900">{detalleAct.nombre}</h3>
+                <p className="m-0 mt-1 text-sm text-gray-500">{detalleAct.nombreOrganizacion}</p>
               </div>
               <BadgeEstado estado={detalleAct.estado} mapa={ESTADOS_ACTIVIDAD} />
             </div>
 
-            <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#4b5563', lineHeight: 1.5 }}>{detalleAct.descripcion}</p>
+            <p className="m-0 mb-4 text-sm text-gray-600 leading-relaxed">{detalleAct.descripcion}</p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '13px', color: '#4b5563', marginBottom: '16px' }}>
+            <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
               <span><strong>Ubicación:</strong> {detalleAct.ubicacion}</span>
               <span><strong>Inicio:</strong> {new Date(detalleAct.fechaInicio).toLocaleDateString()}</span>
               <span><strong>Fin:</strong> {new Date(detalleAct.fechaFin).toLocaleDateString()}</span>
               <span><strong>Cupos:</strong> {detalleAct.voluntariosAsignados}/{detalleAct.voluntariosRequeridos}</span>
             </div>
 
-            <h4 style={{ margin: '0 0 12px', fontSize: '14px', color: '#111827' }}>
+            <h4 className="m-0 mb-3 text-sm text-gray-900">
               Voluntarios asignados ({detalleAct.voluntarios?.length ?? 0})
             </h4>
 
             {(!detalleAct.voluntarios || detalleAct.voluntarios.length === 0) ? (
-              <p style={{ color: '#9ca3af', fontSize: '13px' }}>No hay voluntarios asignados.</p>
+              <p className="text-gray-400 text-sm">No hay voluntarios asignados.</p>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div className="flex flex-col gap-2">
                 {detalleAct.voluntarios.map((v) => (
-                  <div key={v.id} style={S.voluntarioItem}>
-                    <span style={{ fontWeight: 500 }}>{v.nombreCompleto}</span>
-                    <span style={{ color: '#6b7280' }}>{v.email}</span>
+                  <div key={v.id} className="flex justify-between items-center px-3.5 py-2.5 bg-gray-50 rounded-md text-sm">
+                    <span className="font-medium">{v.nombreCompleto}</span>
+                    <span className="text-gray-500">{v.email}</span>
                   </div>
                 ))}
               </div>
             )}
 
-            <div style={{ marginTop: '20px', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+            <div className="mt-5 flex gap-2 justify-end">
               {detalleAct.estado === 'EnProgreso' && (
                 <Boton variante="primario" onClick={() => completarActividad(detalleAct)}>Completar y generar certificados</Boton>
               )}

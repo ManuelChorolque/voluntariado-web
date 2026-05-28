@@ -140,17 +140,17 @@ function DashboardOrganizacion() {
 
   return (
     <div>
-      <h2 style={{ margin: '0 0 4px' }}>Panel de gestión, {usuario.nombre}</h2>
-      <p style={{ margin: '0 0 24px', color: '#6b7280', fontSize: '14px' }}>Administrá tus voluntarios, actividades y certificados</p>
+      <h2 className="m-0 mb-1 text-lg">Panel de gestión, {usuario.nombre}</h2>
+      <p className="m-0 mb-6 text-gray-500 text-sm">Administrá tus voluntarios, actividades y certificados</p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '28px' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-7">
         <TarjetaInformacion titulo="Voluntarios" campos={[{ etiqueta: 'Registrados', valor: cargando ? '...' : voluntarios.length }]} color="#3b82f6" />
         <TarjetaInformacion titulo="Actividades" campos={[{ etiqueta: 'Totales', valor: cargando ? '...' : actividades.length }]} color="#22c55e" />
       </div>
 
-      <section style={{ marginBottom: '24px' }}>
-        <h3 style={{ margin: '0 0 16px', fontSize: '18px', color: '#111827' }}>Acciones rápidas</h3>
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+      <section className="mb-6">
+        <h3 className="m-0 mb-4 text-lg text-gray-900">Acciones rápidas</h3>
+        <div className="flex gap-3 flex-wrap">
           <Boton onClick={() => setFormActividad(true)}>Crear Actividad</Boton>
           <Boton variante="secundario" onClick={() => setFormHoras(true)}>Registrar Horas</Boton>
           <Boton variante="secundario" onClick={() => setFormCertificado(true)}>Generar Certificado</Boton>
@@ -158,11 +158,11 @@ function DashboardOrganizacion() {
       </section>
 
       <section>
-        <h3 style={{ margin: '0 0 16px', fontSize: '18px', color: '#111827' }}>Actividades recientes</h3>
-        {cargando ? <p style={{ color: '#6b7280' }}>Cargando...</p> : actividades.length === 0 ? (
-          <p style={{ color: '#9ca3af' }}>No hay actividades registradas.</p>
+        <h3 className="m-0 mb-4 text-lg text-gray-900">Actividades recientes</h3>
+        {cargando ? <p className="text-gray-500">Cargando...</p> : actividades.length === 0 ? (
+          <p className="text-gray-400">No hay actividades registradas.</p>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {actividades.slice(0, 6).map((act) => (
               <TarjetaActividad key={act.id} actividad={act} modo="ong" onIniciar={iniciarActividad} onCompletar={completarActividad} onEditar={abrirEditar} />
             ))}
@@ -170,129 +170,133 @@ function DashboardOrganizacion() {
         )}
       </section>
 
+      {/* Modal Crear Actividad */}
       <ModalForm abierto={formActividad} titulo="Crear Actividad" onCerrar={() => setFormActividad(false)} onSubmit={crearActividad} enviando={enviando}>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Nombre</label>
-          <input style={estiloInput} value={nuevaActividad.nombre} onChange={(e) => setNuevaActividad({ ...nuevaActividad, nombre: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Nombre</label>
+          <input className={estiloInput} value={nuevaActividad.nombre} onChange={(e) => setNuevaActividad({ ...nuevaActividad, nombre: e.target.value })} required />
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Descripción</label>
-          <textarea style={{ ...estiloInput, minHeight: '80px' }} value={nuevaActividad.descripcion} onChange={(e) => setNuevaActividad({ ...nuevaActividad, descripcion: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Descripción</label>
+          <textarea className={`${estiloInput} min-h-[80px]`} value={nuevaActividad.descripcion} onChange={(e) => setNuevaActividad({ ...nuevaActividad, descripcion: e.target.value })} required />
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Ubicación</label>
-          <input style={estiloInput} value={nuevaActividad.ubicacion} onChange={(e) => setNuevaActividad({ ...nuevaActividad, ubicacion: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Ubicación</label>
+          <input className={estiloInput} value={nuevaActividad.ubicacion} onChange={(e) => setNuevaActividad({ ...nuevaActividad, ubicacion: e.target.value })} required />
         </div>
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={estiloLabel}>Fecha inicio</label>
-            <input type="date" style={estiloInput} value={nuevaActividad.fechaInicio} onChange={(e) => setNuevaActividad({ ...nuevaActividad, fechaInicio: e.target.value })} required />
+        <div className="flex gap-3 mb-3.5">
+          <div className="flex-1">
+            <label className={estiloLabel}>Fecha inicio</label>
+            <input type="date" className={estiloInput} value={nuevaActividad.fechaInicio} onChange={(e) => setNuevaActividad({ ...nuevaActividad, fechaInicio: e.target.value })} required />
           </div>
-          <div style={{ flex: 1 }}>
-            <label style={estiloLabel}>Fecha fin</label>
-            <input type="date" style={estiloInput} value={nuevaActividad.fechaFin} onChange={(e) => setNuevaActividad({ ...nuevaActividad, fechaFin: e.target.value })} required />
+          <div className="flex-1">
+            <label className={estiloLabel}>Fecha fin</label>
+            <input type="date" className={estiloInput} value={nuevaActividad.fechaFin} onChange={(e) => setNuevaActividad({ ...nuevaActividad, fechaFin: e.target.value })} required />
           </div>
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Voluntarios requeridos</label>
-          <input type="number" min="1" style={estiloInput} value={nuevaActividad.voluntariosRequeridos} onChange={(e) => setNuevaActividad({ ...nuevaActividad, voluntariosRequeridos: Number(e.target.value) })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Voluntarios requeridos</label>
+          <input type="number" min="1" className={estiloInput} value={nuevaActividad.voluntariosRequeridos} onChange={(e) => setNuevaActividad({ ...nuevaActividad, voluntariosRequeridos: Number(e.target.value) })} required />
         </div>
       </ModalForm>
 
+      {/* Modal Editar Actividad */}
       <ModalForm abierto={formEditarAct} titulo="Editar Actividad" onCerrar={() => setFormEditarAct(false)} onSubmit={guardarEditar} enviando={enviando}>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Nombre</label>
-          <input style={estiloInput} value={editActForm.nombre} onChange={(e) => setEditActForm({ ...editActForm, nombre: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Nombre</label>
+          <input className={estiloInput} value={editActForm.nombre} onChange={(e) => setEditActForm({ ...editActForm, nombre: e.target.value })} required />
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Descripción</label>
-          <textarea style={{ ...estiloInput, minHeight: '80px' }} value={editActForm.descripcion} onChange={(e) => setEditActForm({ ...editActForm, descripcion: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Descripción</label>
+          <textarea className={`${estiloInput} min-h-[80px]`} value={editActForm.descripcion} onChange={(e) => setEditActForm({ ...editActForm, descripcion: e.target.value })} required />
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Ubicación</label>
-          <input style={estiloInput} value={editActForm.ubicacion} onChange={(e) => setEditActForm({ ...editActForm, ubicacion: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Ubicación</label>
+          <input className={estiloInput} value={editActForm.ubicacion} onChange={(e) => setEditActForm({ ...editActForm, ubicacion: e.target.value })} required />
         </div>
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={estiloLabel}>Fecha inicio</label>
-            <input type="date" style={estiloInput} value={editActForm.fechaInicio} onChange={(e) => setEditActForm({ ...editActForm, fechaInicio: e.target.value })} required />
+        <div className="flex gap-3 mb-3.5">
+          <div className="flex-1">
+            <label className={estiloLabel}>Fecha inicio</label>
+            <input type="date" className={estiloInput} value={editActForm.fechaInicio} onChange={(e) => setEditActForm({ ...editActForm, fechaInicio: e.target.value })} required />
           </div>
-          <div style={{ flex: 1 }}>
-            <label style={estiloLabel}>Fecha fin</label>
-            <input type="date" style={estiloInput} value={editActForm.fechaFin} onChange={(e) => setEditActForm({ ...editActForm, fechaFin: e.target.value })} required />
+          <div className="flex-1">
+            <label className={estiloLabel}>Fecha fin</label>
+            <input type="date" className={estiloInput} value={editActForm.fechaFin} onChange={(e) => setEditActForm({ ...editActForm, fechaFin: e.target.value })} required />
           </div>
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Voluntarios requeridos</label>
-          <input type="number" min="1" style={estiloInput} value={editActForm.voluntariosRequeridos} onChange={(e) => setEditActForm({ ...editActForm, voluntariosRequeridos: Number(e.target.value) })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Voluntarios requeridos</label>
+          <input type="number" min="1" className={estiloInput} value={editActForm.voluntariosRequeridos} onChange={(e) => setEditActForm({ ...editActForm, voluntariosRequeridos: Number(e.target.value) })} required />
         </div>
       </ModalForm>
 
+      {/* Modal Registrar Horas */}
       <ModalForm abierto={formHoras} titulo="Registrar Horas" onCerrar={() => setFormHoras(false)} onSubmit={registrarHoras} enviando={enviando}>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Voluntario</label>
-          <select style={estiloInput} value={nuevasHoras.voluntarioId} onChange={(e) => setNuevasHoras({ ...nuevasHoras, voluntarioId: e.target.value })} required>
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Voluntario</label>
+          <select className={estiloInput} value={nuevasHoras.voluntarioId} onChange={(e) => setNuevasHoras({ ...nuevasHoras, voluntarioId: e.target.value })} required>
             <option value="">Seleccionar...</option>
             {voluntarios.map((v) => (
               <option key={v.id} value={v.id}>{v.nombre} {v.apellido}</option>
             ))}
           </select>
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Actividad</label>
-          <select style={estiloInput} value={nuevasHoras.actividadId} onChange={(e) => setNuevasHoras({ ...nuevasHoras, actividadId: e.target.value })} required>
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Actividad</label>
+          <select className={estiloInput} value={nuevasHoras.actividadId} onChange={(e) => setNuevasHoras({ ...nuevasHoras, actividadId: e.target.value })} required>
             <option value="">Seleccionar...</option>
             {actividades.map((a) => (
               <option key={a.id} value={a.id}>{a.nombre}</option>
             ))}
           </select>
         </div>
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={estiloLabel}>Fecha/Hora inicio</label>
-            <input type="datetime-local" style={estiloInput} value={nuevasHoras.fechaInicio} onChange={(e) => setNuevasHoras({ ...nuevasHoras, fechaInicio: e.target.value })} required />
+        <div className="flex gap-3 mb-3.5">
+          <div className="flex-1">
+            <label className={estiloLabel}>Fecha/Hora inicio</label>
+            <input type="datetime-local" className={estiloInput} value={nuevasHoras.fechaInicio} onChange={(e) => setNuevasHoras({ ...nuevasHoras, fechaInicio: e.target.value })} required />
           </div>
-          <div style={{ flex: 1 }}>
-            <label style={estiloLabel}>Fecha/Hora fin</label>
-            <input type="datetime-local" style={estiloInput} value={nuevasHoras.fechaFin} onChange={(e) => setNuevasHoras({ ...nuevasHoras, fechaFin: e.target.value })} required />
+          <div className="flex-1">
+            <label className={estiloLabel}>Fecha/Hora fin</label>
+            <input type="datetime-local" className={estiloInput} value={nuevasHoras.fechaFin} onChange={(e) => setNuevasHoras({ ...nuevasHoras, fechaFin: e.target.value })} required />
           </div>
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Descripción</label>
-          <textarea style={{ ...estiloInput, minHeight: '60px' }} value={nuevasHoras.descripcion} onChange={(e) => setNuevasHoras({ ...nuevasHoras, descripcion: e.target.value })} />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Descripción</label>
+          <textarea className={`${estiloInput} min-h-[60px]`} value={nuevasHoras.descripcion} onChange={(e) => setNuevasHoras({ ...nuevasHoras, descripcion: e.target.value })} />
         </div>
       </ModalForm>
 
+      {/* Modal Generar Certificado */}
       <ModalForm abierto={formCertificado} titulo="Generar Certificado" onCerrar={() => setFormCertificado(false)} onSubmit={generarCertificado} enviando={enviando}>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Voluntario</label>
-          <select style={estiloInput} value={nuevoCertificado.voluntarioId} onChange={(e) => setNuevoCertificado({ ...nuevoCertificado, voluntarioId: e.target.value })} required>
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Voluntario</label>
+          <select className={estiloInput} value={nuevoCertificado.voluntarioId} onChange={(e) => setNuevoCertificado({ ...nuevoCertificado, voluntarioId: e.target.value })} required>
             <option value="">Seleccionar...</option>
             {voluntarios.map((v) => (
               <option key={v.id} value={v.id}>{v.nombre} {v.apellido}</option>
             ))}
           </select>
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Actividad (opcional)</label>
-          <select style={estiloInput} value={nuevoCertificado.actividadId} onChange={(e) => setNuevoCertificado({ ...nuevoCertificado, actividadId: e.target.value })}>
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Actividad (opcional)</label>
+          <select className={estiloInput} value={nuevoCertificado.actividadId} onChange={(e) => setNuevoCertificado({ ...nuevoCertificado, actividadId: e.target.value })}>
             <option value="">Seleccionar...</option>
             {actividades.map((a) => (
               <option key={a.id} value={a.id}>{a.nombre}</option>
             ))}
           </select>
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Tema específico</label>
-          <input style={estiloInput} value={nuevoCertificado.temaEspecifico} onChange={(e) => setNuevoCertificado({ ...nuevoCertificado, temaEspecifico: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Tema específico</label>
+          <input className={estiloInput} value={nuevoCertificado.temaEspecifico} onChange={(e) => setNuevoCertificado({ ...nuevoCertificado, temaEspecifico: e.target.value })} required />
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Firmante (nombre)</label>
-          <input style={estiloInput} value={nuevoCertificado.firmanteNombre} onChange={(e) => setNuevoCertificado({ ...nuevoCertificado, firmanteNombre: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Firmante (nombre)</label>
+          <input className={estiloInput} value={nuevoCertificado.firmanteNombre} onChange={(e) => setNuevoCertificado({ ...nuevoCertificado, firmanteNombre: e.target.value })} required />
         </div>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={estiloLabel}>Firmante (cargo)</label>
-          <input style={estiloInput} value={nuevoCertificado.firmanteCargo} onChange={(e) => setNuevoCertificado({ ...nuevoCertificado, firmanteCargo: e.target.value })} required />
+        <div className="mb-3.5">
+          <label className={estiloLabel}>Firmante (cargo)</label>
+          <input className={estiloInput} value={nuevoCertificado.firmanteCargo} onChange={(e) => setNuevoCertificado({ ...nuevoCertificado, firmanteCargo: e.target.value })} required />
         </div>
       </ModalForm>
     </div>

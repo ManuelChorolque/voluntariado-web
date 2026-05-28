@@ -1,37 +1,22 @@
 function TarjetaInformacion({ titulo, campos, color = '#3b82f6' }) {
   return (
-    <div
-      style={{
-        border: '1px solid #e5e7eb',
-        borderRadius: '8px',
-        overflow: 'hidden'
-      }}
-    >
+    <div className="border border-gray-200 rounded-lg overflow-hidden">
       <div
-        style={{
-          background: color,
-          color: '#fff',
-          padding: '12px 16px',
-          fontSize: '16px',
-          fontWeight: 600
-        }}
+        className="px-4 py-3 text-white font-semibold text-base"
+        style={{ background: color }}
       >
         {titulo}
       </div>
-      <div style={{ padding: '16px' }}>
+      <div className="p-4">
         {campos.map((campo, i) => (
           <div
             key={i}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              padding: '6px 0',
-              borderBottom: i < campos.length - 1 ? '1px solid #f3f4f6' : 'none',
-              fontSize: '14px'
-            }}
+            className={`flex justify-between text-sm py-1.5 ${
+              i < campos.length - 1 ? 'border-b border-gray-100' : ''
+            }`}
           >
-            <span style={{ color: '#6b7280' }}>{campo.etiqueta}</span>
-            <span style={{ color: '#111827', fontWeight: 500 }}>{campo.valor ?? '—'}</span>
+            <span className="text-gray-500">{campo.etiqueta}</span>
+            <span className="text-gray-900 font-medium">{campo.valor ?? '—'}</span>
           </div>
         ))}
       </div>

@@ -24,56 +24,81 @@ function Register() {
     }
   };
 
-  const estiloInput = { width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box' };
-
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f4f8' }}>
-      <div style={{ background: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 4px 24px rgba(0,0,0,0.08)', width: '400px', maxWidth: '90%' }}>
-        <h1 style={{ margin: '0 0 4px', color: '#1e3a5f', fontSize: '24px' }}>Crear cuenta</h1>
-        <p style={{ margin: '0 0 24px', color: '#6b7280', fontSize: '14px' }}>Unite a la red de voluntariado</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-10 rounded-xl shadow-sm w-[400px] max-w-[90%]">
+        <h1 className="m-0 mb-1 text-[#1e3a5f] text-2xl font-bold">Crear cuenta</h1>
+        <p className="m-0 mb-6 text-gray-500 text-sm">Unite a la red de voluntariado</p>
 
         {error && (
-          <p style={{ background: '#fef2f2', color: '#dc2626', padding: '10px', borderRadius: '6px', fontSize: '14px', marginBottom: '16px' }}>{error}</p>
+          <p className="bg-red-50 text-red-600 p-2.5 rounded-md text-sm mb-4">{error}</p>
         )}
 
         <form onSubmit={manejarSubmit}>
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
-            <div style={{ flex: 1 }}>
-              <label style={{ display: 'block', marginBottom: '6px', color: '#374151', fontSize: '14px', fontWeight: 500 }}>Nombre</label>
-              <input style={estiloInput} value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} required />
+          <div className="flex gap-3 mb-4">
+            <div className="flex-1">
+              <label className="block mb-1.5 text-gray-700 text-sm font-medium">Nombre</label>
+              <input
+                className="w-full px-3 py-2.5 border border-gray-300 rounded-md text-sm box-border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+                value={form.nombre}
+                onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+                required
+              />
             </div>
-            <div style={{ flex: 1 }}>
-              <label style={{ display: 'block', marginBottom: '6px', color: '#374151', fontSize: '14px', fontWeight: 500 }}>Apellido</label>
-              <input style={estiloInput} value={form.apellido} onChange={(e) => setForm({ ...form, apellido: e.target.value })} required />
+            <div className="flex-1">
+              <label className="block mb-1.5 text-gray-700 text-sm font-medium">Apellido</label>
+              <input
+                className="w-full px-3 py-2.5 border border-gray-300 rounded-md text-sm box-border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+                value={form.apellido}
+                onChange={(e) => setForm({ ...form, apellido: e.target.value })}
+                required
+              />
             </div>
           </div>
 
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', marginBottom: '6px', color: '#374151', fontSize: '14px', fontWeight: 500 }}>Email</label>
-            <input type="email" style={estiloInput} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+          <div className="mb-4">
+            <label className="block mb-1.5 text-gray-700 text-sm font-medium">Email</label>
+            <input
+              type="email"
+              className="w-full px-3 py-2.5 border border-gray-300 rounded-md text-sm box-border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+            />
           </div>
 
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', marginBottom: '6px', color: '#374151', fontSize: '14px', fontWeight: 500 }}>Contrasena</label>
-            <input type="password" style={estiloInput} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required minLength={6} />
+          <div className="mb-4">
+            <label className="block mb-1.5 text-gray-700 text-sm font-medium">Contrasena</label>
+            <input
+              type="password"
+              className="w-full px-3 py-2.5 border border-gray-300 rounded-md text-sm box-border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required
+              minLength={6}
+            />
           </div>
 
-          <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', marginBottom: '6px', color: '#374151', fontSize: '14px', fontWeight: 500 }}>Tipo de cuenta</label>
-            <select style={estiloInput} value={form.rol} onChange={(e) => setForm({ ...form, rol: e.target.value })}>
+          <div className="mb-6">
+            <label className="block mb-1.5 text-gray-700 text-sm font-medium">Tipo de cuenta</label>
+            <select
+              className="w-full px-3 py-2.5 border border-gray-300 rounded-md text-sm box-border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none bg-white"
+              value={form.rol}
+              onChange={(e) => setForm({ ...form, rol: e.target.value })}
+            >
               <option value="Voluntario">Voluntario</option>
               <option value="Organizacion">Organizacion (ONG)</option>
             </select>
           </div>
 
-          <Boton tipo="submit" deshabilitado={cargando} style={{ width: '100%' }}>
+          <Boton tipo="submit" deshabilitado={cargando} className="w-full">
             {cargando ? 'Creando cuenta...' : 'Crear cuenta'}
           </Boton>
         </form>
 
-        <p style={{ marginTop: '20px', textAlign: 'center', color: '#6b7280', fontSize: '14px' }}>
+        <p className="mt-5 text-center text-gray-500 text-sm">
           ¿Ya tenes cuenta?{' '}
-          <Link to="/login" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 500 }}>Inicia sesion</Link>
+          <Link to="/login" className="text-blue-500 no-underline font-medium">Inicia sesion</Link>
         </p>
       </div>
     </div>

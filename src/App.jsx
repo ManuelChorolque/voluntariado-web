@@ -42,34 +42,30 @@ function Navegacion() {
   const enlaces = NAV_MAP[usuario?.rol] ?? [];
 
   return (
-    <nav style={{ background: '#1e3a5f', padding: '12px 24px', display: 'flex', gap: '20px', alignItems: 'center' }}>
-      <span style={{ color: '#fff', fontWeight: 700, fontSize: '18px' }}>Voluntariado</span>
+    <nav className="bg-[#1e3a5f] px-6 py-3 flex gap-5 items-center">
+      <span className="text-white font-bold text-lg">Voluntariado</span>
       {enlaces.map(({ to, label }) => (
         <NavLink
           key={to}
           to={to}
           end={to === '/'}
-          style={({ isActive }) => ({
-            color: isActive ? '#93c5fd' : '#cbd5e1',
-            textDecoration: 'none',
-            fontSize: '14px',
-            fontWeight: isActive ? 600 : 400,
-            padding: '4px 8px',
-            borderRadius: '4px',
-            background: isActive ? 'rgba(255,255,255,0.1)' : 'transparent'
-          })}
+          className={({ isActive }) =>
+            `text-sm no-underline px-2 py-1 rounded ${
+              isActive ? 'text-blue-300 font-semibold bg-white/10' : 'text-gray-300'
+            }`
+          }
         >
           {label}
         </NavLink>
       ))}
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <span style={{ color: '#93c5fd', fontSize: '13px' }}>
+      <div className="ml-auto flex items-center gap-3">
+        <span className="text-blue-300 text-sm">
           {usuario?.nombre} {usuario?.apellido}
-          <span style={{ color: '#6b8cae', marginLeft: '6px' }}>({usuario?.rol})</span>
+          <span className="text-gray-400 ml-1.5">({usuario?.rol})</span>
         </span>
         <button
           onClick={logout}
-          style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#cbd5e1', padding: '6px 14px', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+          className="bg-white/10 border-none text-gray-300 px-3.5 py-1.5 rounded cursor-pointer text-sm hover:bg-white/20"
         >
           Salir
         </button>
@@ -115,9 +111,9 @@ function AppLayout() {
   const { usuario } = useAuth();
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f9fafb' }}>
+    <div className="min-h-screen bg-gray-100">
       {usuario && <Navegacion />}
-      <main style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <main className="p-6 max-w-[1200px] mx-auto">
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/registrar" element={<Register />} />

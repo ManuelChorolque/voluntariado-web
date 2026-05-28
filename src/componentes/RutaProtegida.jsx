@@ -5,7 +5,7 @@ function RutaProtegida({ children }) {
   const { usuario, cargando } = useAuth();
 
   if (cargando) {
-    return <p style={{ textAlign: 'center', padding: '40px', color: '#6b7280' }}>Cargando...</p>;
+    return <p className="text-center py-10 text-gray-500">Cargando...</p>;
   }
 
   if (!usuario) {

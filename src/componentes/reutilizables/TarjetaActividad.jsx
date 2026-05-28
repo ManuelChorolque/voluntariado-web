@@ -5,20 +5,6 @@ import BadgeEstado from './BadgeEstado';
 import Boton from './Boton';
 import { ESTADOS_ACTIVIDAD } from '../../constantes';
 
-const S = {
-  card: {
-    border: '1px solid #e5e7eb',
-    borderRadius: '10px',
-    padding: '20px',
-    background: '#fff',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-    transition: 'box-shadow 0.2s',
-    cursor: 'default'
-  }
-};
-
 function TarjetaActividad({ actividad, modo = 'voluntario', onActualizar, onEditar, onIniciar, onCompletar, ocultarBoton = false }) {
   const { usuario } = useAuth();
   const [postulando, setPostulando] = useState(false);
@@ -39,22 +25,20 @@ function TarjetaActividad({ actividad, modo = 'voluntario', onActualizar, onEdit
 
   return (
     <div
-      style={S.card}
-      onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'}
-      onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'none'}
+      className="border border-gray-200 rounded-lg p-5 bg-white flex flex-col gap-3 transition-shadow duration-200 hover:shadow-md"
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#111827' }}>
+      <div className="flex justify-between items-start">
+        <h3 className="m-0 text-base font-semibold text-gray-900">
           {actividad.nombre}
         </h3>
         <BadgeEstado estado={actividad.estado} mapa={ESTADOS_ACTIVIDAD} />
       </div>
 
-      <p style={{ margin: 0, color: '#6b7280', fontSize: '13px', lineHeight: 1.4 }}>
+      <p className="m-0 text-gray-500 text-sm leading-relaxed">
         {actividad.descripcion}
       </p>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '13px', color: '#4b5563' }}>
+      <div className="flex flex-col gap-1 text-sm text-gray-600">
         <span><strong>Organización:</strong> {actividad.nombreOrganizacion}</span>
         <span><strong>Ubicación:</strong> {actividad.ubicacion}</span>
         <span><strong>Fecha:</strong> {new Date(actividad.fechaInicio).toLocaleDateString()} — {new Date(actividad.fechaFin).toLocaleDateString()}</span>
@@ -73,7 +57,7 @@ function TarjetaActividad({ actividad, modo = 'voluntario', onActualizar, onEdit
       )}
 
       {modo === 'ong' && (
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="flex gap-2">
           {actividad.estado === 'Cerrada' && (
             <Boton variante="primario" onClick={() => onIniciar?.(actividad)}>Iniciar</Boton>
           )}

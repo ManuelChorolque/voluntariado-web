@@ -5,15 +5,7 @@ function Buscador({ valor, onChange, placeholder = 'Buscar...' }) {
       value={valor}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      style={{
-        padding: '8px 14px',
-        border: '1px solid #d1d5db',
-        borderRadius: '6px',
-        fontSize: '14px',
-        width: '100%',
-        maxWidth: '320px',
-        outline: 'none'
-      }}
+      className="px-3.5 py-2 border border-gray-300 rounded-md text-sm w-full max-w-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
     />
   );
 }
