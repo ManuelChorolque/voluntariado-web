@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
-import { horasApi } from '../servicios/api';
-import TablaGenerica from '../componentes/reutilizables/TablaGenerica';
-import ModalConfirmacion from '../componentes/reutilizables/ModalConfirmacion';
-import Boton from '../componentes/reutilizables/Boton';
-import { MENSAJES } from '../constantes';
+import { horasApi } from '../../servicios/api';
+import TablaGenerica from '../../componentes/reutilizables/TablaGenerica';
+import ModalConfirmacion from '../../componentes/reutilizables/ModalConfirmacion';
+import Boton from '../../componentes/reutilizables/Boton';
+import { MENSAJES } from '../../constantes';
 
 const COLUMNAS = [
   { clave: 'nombreVoluntario', etiqueta: 'Voluntario' },
@@ -59,8 +59,8 @@ function Horas() {
     [datosFiltrados]
   );
 
-  const calcularTotal = () => {
-    alert(`Total de horas: ${totalFiltrado.toFixed(1)}`);
+  const limpiarFiltros = () => {
+    setBusqueda('');
   };
 
   const abrirModalEliminar = (id) => {
@@ -99,9 +99,7 @@ function Horas() {
           onChange={(e) => setBusqueda(e.target.value)}
           className="border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 min-w-[220px]"
         />
-        <Boton variante="secundario" onClick={calcularTotal}>
-          Calcular Horas
-        </Boton>
+        <Boton variante="secundario" onClick={limpiarFiltros}>Limpiar</Boton>
       </div>
 
       <TablaGenerica
@@ -109,15 +107,18 @@ function Horas() {
         datos={datosFiltrados}
         cargando={cargando}
         alHacerClickEnEliminar={abrirModalEliminar}
+        textoBotonEliminar="Anular"
       />
 
       <ModalConfirmacion
         abierto={modalAbierto}
-        titulo="Eliminar registro de horas"
+        titulo="Anular registro de horas"
         mensaje={MENSAJES.CONFIRMAR_ELIMINAR}
         onConfirmar={confirmarEliminar}
         onCancelar={() => { setModalAbierto(false); setIdSeleccionado(null); }}
         confirmando={confirmando}
+        textoConfirmar="Anular"
+        textoProcesando="Anulando..."
       />
     </div>
   );

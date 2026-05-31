@@ -2,23 +2,24 @@ import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-do
 import { AuthProvider, useAuth } from './contextos/AuthContext';
 import RutaProtegida from './componentes/RutaProtegida';
 import Dashboard from './paginas/Dashboard';
-import Voluntarios from './paginas/Voluntarios';
-import Horas from './paginas/Horas';
-import Certificados from './paginas/Certificados';
-import MisCertificados from './paginas/MisCertificados';
+import Voluntarios from './paginas/compartido/Voluntarios';
+import Horas from './paginas/compartido/Horas';
+import Certificados from './paginas/compartido/Certificados';
+import MisCertificados from './paginas/voluntariado/MisCertificados';
 import MisActividades from './paginas/voluntariado/MisActividades';
 import ActividadesOrganizacion from './paginas/organizacion/ActividadesOrganizacion';
-import OrganizacionesAdmin from './paginas/administrador/OrganizacionesAdmin';
+import CertificadosOrganizacion from './paginas/organizacion/CertificadosOrganizacion';
+import GestionUsuarios from './paginas/administrador/GestionUsuarios';
+import ActividadesAdmin from './paginas/administrador/ActividadesAdmin';
+import CertificadosAdmin from './paginas/administrador/CertificadosAdmin';
 import Login from './paginas/Login';
 import Register from './paginas/Register';
 
 const NAV_MAP = {
   Admin: [
     { to: '/', label: 'Dashboard' },
+    { to: '/usuarios', label: 'Usuarios' },
     { to: '/actividades', label: 'Actividades' },
-    { to: '/organizaciones', label: 'Organizaciones' },
-    { to: '/voluntarios', label: 'Voluntarios' },
-    { to: '/horas', label: 'Horas' },
     { to: '/certificados', label: 'Certificados' }
   ],
   Organizacion: [
@@ -34,8 +35,6 @@ const NAV_MAP = {
     { to: '/mis-certificados', label: 'Mis Certificados' }
   ]
 };
-
-const ROLES_CON_CRUD = ['Admin', 'Organizacion'];
 
 function Navegacion() {
   const { usuario, logout } = useAuth();
@@ -76,23 +75,26 @@ function Navegacion() {
 
 function RutasProtegidas() {
   const { usuario } = useAuth();
-  const esAdminOrONG = ROLES_CON_CRUD.includes(usuario?.rol);
 
   return (
     <Routes>
       <Route path="/" element={<Dashboard />} />
 
-      {esAdminOrONG && (
+      {usuario?.rol === 'Organizacion' && (
         <>
           <Route path="/actividades" element={<ActividadesOrganizacion />} />
           <Route path="/voluntarios" element={<Voluntarios />} />
           <Route path="/horas" element={<Horas />} />
-          <Route path="/certificados" element={<Certificados />} />
+          <Route path="/certificados" element={<CertificadosOrganizacion />} />
         </>
       )}
 
       {usuario?.rol === 'Admin' && (
-        <Route path="/organizaciones" element={<OrganizacionesAdmin />} />
+        <>
+          <Route path="/usuarios" element={<GestionUsuarios />} />
+          <Route path="/actividades" element={<ActividadesAdmin />} />
+          <Route path="/certificados" element={<CertificadosAdmin />} />
+        </>
       )}
 
       {usuario?.rol === 'Voluntario' && (

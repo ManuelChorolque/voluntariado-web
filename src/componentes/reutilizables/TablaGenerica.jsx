@@ -1,4 +1,4 @@
-function TablaGenerica({ columnas, datos, alHacerClickEnEliminar, acciones, cargando }) {
+function TablaGenerica({ columnas, datos, alHacerClickEnEliminar, acciones, cargando, textoBotonEliminar = 'Eliminar' }) {
   if (cargando) {
     return <p className="text-gray-500 text-center py-10">Cargando...</p>;
   }
@@ -42,7 +42,7 @@ function TablaGenerica({ columnas, datos, alHacerClickEnEliminar, acciones, carg
                         onClick={() => alHacerClickEnEliminar(fila.id)}
                         className="bg-none border-none text-red-500 cursor-pointer text-sm hover:text-red-600"
                       >
-                        Eliminar
+                        {textoBotonEliminar}
                       </button>
                     )}
                   </div>

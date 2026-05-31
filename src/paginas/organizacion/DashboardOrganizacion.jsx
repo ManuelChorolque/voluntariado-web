@@ -18,9 +18,9 @@ function DashboardOrganizacion() {
   const [formCertificado, setFormCertificado] = useState(false);
   const [enviando, setEnviando] = useState(false);
 
-  const [nuevaActividad, setNuevaActividad] = useState({ nombre: '', descripcion: '', ubicacion: '', fechaInicio: '', fechaFin: '', voluntariosRequeridos: 1 });
+  const [nuevaActividad, setNuevaActividad] = useState({ nombre: '', descripcion: '', ubicacion: '', fechaInicio: '', fechaFin: '', voluntariosRequeridos: 1, horasPorDia: '', duracionDias: '' });
   const [editandoAct, setEditandoAct] = useState(null);
-  const [editActForm, setEditActForm] = useState({ nombre: '', descripcion: '', ubicacion: '', fechaInicio: '', fechaFin: '', voluntariosRequeridos: 1 });
+  const [editActForm, setEditActForm] = useState({ nombre: '', descripcion: '', ubicacion: '', fechaInicio: '', fechaFin: '', voluntariosRequeridos: 1, horasPorDia: '', duracionDias: '' });
   const [nuevasHoras, setNuevasHoras] = useState({ voluntarioId: '', actividadId: '', fechaInicio: '', fechaFin: '', descripcion: '' });
   const [nuevoCertificado, setNuevoCertificado] = useState({ voluntarioId: '', actividadId: '', temaEspecifico: '', firmanteNombre: '', firmanteCargo: '' });
 
@@ -45,12 +45,23 @@ function DashboardOrganizacion() {
         ...nuevaActividad,
         organizacionId: usuario.organizacionId,
         fechaInicio: new Date(nuevaActividad.fechaInicio).toISOString(),
-        fechaFin: new Date(nuevaActividad.fechaFin).toISOString()
+        fechaFin: new Date(nuevaActividad.fechaFin).toISOString(),
+        horasPorDia: Number(nuevaActividad.horasPorDia),
+        duracionDias: Number(nuevaActividad.duracionDias)
       });
       setFormActividad(false);
-      setNuevaActividad({ nombre: '', descripcion: '', ubicacion: '', fechaInicio: '', fechaFin: '', voluntariosRequeridos: 1 });
+      setNuevaActividad({ nombre: '', descripcion: '', ubicacion: '', fechaInicio: '', fechaFin: '', voluntariosRequeridos: 1, horasPorDia: '', duracionDias: '' });
       cargarDatos();
     } catch { alert('Error al crear actividad'); } finally { setEnviando(false); }
+  };
+
+  const abrirActividad = async (actividad) => {
+    try {
+      await actividadesApi.abrir(actividad.id);
+      cargarDatos();
+    } catch {
+      alert('Error al abrir la actividad');
+    }
   };
 
   const iniciarActividad = async (actividad) => {
@@ -82,7 +93,9 @@ function DashboardOrganizacion() {
       ubicacion: actividad.ubicacion,
       fechaInicio: actividad.fechaInicio?.split('T')[0] || '',
       fechaFin: actividad.fechaFin?.split('T')[0] || '',
-      voluntariosRequeridos: actividad.voluntariosRequeridos
+      voluntariosRequeridos: actividad.voluntariosRequeridos,
+      horasPorDia: actividad.horasPorDia || '',
+      duracionDias: actividad.duracionDias || ''
     });
     setFormEditarAct(true);
   };
@@ -164,7 +177,7 @@ function DashboardOrganizacion() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {actividades.slice(0, 6).map((act) => (
-              <TarjetaActividad key={act.id} actividad={act} modo="ong" onIniciar={iniciarActividad} onCompletar={completarActividad} onEditar={abrirEditar} />
+              <TarjetaActividad key={act.id} actividad={act} modo="ong" onAbrir={abrirActividad} onIniciar={iniciarActividad} onCompletar={completarActividad} onEditar={abrirEditar} />
             ))}
           </div>
         )}
@@ -198,6 +211,16 @@ function DashboardOrganizacion() {
           <label className={estiloLabel}>Voluntarios requeridos</label>
           <input type="number" min="1" className={estiloInput} value={nuevaActividad.voluntariosRequeridos} onChange={(e) => setNuevaActividad({ ...nuevaActividad, voluntariosRequeridos: Number(e.target.value) })} required />
         </div>
+        <div className="flex gap-3 mb-3.5">
+          <div className="flex-1">
+            <label className={estiloLabel}>Horas por día</label>
+            <input type="number" min="0.5" step="0.5" className={estiloInput} value={nuevaActividad.horasPorDia} onChange={(e) => setNuevaActividad({ ...nuevaActividad, horasPorDia: e.target.value })} required />
+          </div>
+          <div className="flex-1">
+            <label className={estiloLabel}>Duración (días)</label>
+            <input type="number" min="1" className={estiloInput} value={nuevaActividad.duracionDias} onChange={(e) => setNuevaActividad({ ...nuevaActividad, duracionDias: e.target.value })} required />
+          </div>
+        </div>
       </ModalForm>
 
       {/* Modal Editar Actividad */}
@@ -227,6 +250,16 @@ function DashboardOrganizacion() {
         <div className="mb-3.5">
           <label className={estiloLabel}>Voluntarios requeridos</label>
           <input type="number" min="1" className={estiloInput} value={editActForm.voluntariosRequeridos} onChange={(e) => setEditActForm({ ...editActForm, voluntariosRequeridos: Number(e.target.value) })} required />
+        </div>
+        <div className="flex gap-3 mb-3.5">
+          <div className="flex-1">
+            <label className={estiloLabel}>Horas por día</label>
+            <input type="number" min="0.5" step="0.5" className={estiloInput} value={editActForm.horasPorDia} onChange={(e) => setEditActForm({ ...editActForm, horasPorDia: e.target.value })} required />
+          </div>
+          <div className="flex-1">
+            <label className={estiloLabel}>Duración (días)</label>
+            <input type="number" min="1" className={estiloInput} value={editActForm.duracionDias} onChange={(e) => setEditActForm({ ...editActForm, duracionDias: e.target.value })} required />
+          </div>
         </div>
       </ModalForm>
 

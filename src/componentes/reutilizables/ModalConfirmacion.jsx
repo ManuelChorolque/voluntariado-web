@@ -1,6 +1,6 @@
 import Boton from './Boton';
 
-function ModalConfirmacion({ abierto, titulo, mensaje, onConfirmar, onCancelar, confirmando }) {
+function ModalConfirmacion({ abierto, titulo, mensaje, onConfirmar, onCancelar, confirmando, textoConfirmar = 'Eliminar', textoProcesando = 'Eliminando...' }) {
   if (!abierto) return null;
 
   return (
@@ -19,7 +19,7 @@ function ModalConfirmacion({ abierto, titulo, mensaje, onConfirmar, onCancelar, 
             Cancelar
           </Boton>
           <Boton variante="peligro" onClick={onConfirmar} deshabilitado={confirmando}>
-            {confirmando ? 'Eliminando...' : 'Eliminar'}
+            {confirmando ? textoProcesando : textoConfirmar}
           </Boton>
         </div>
       </div>

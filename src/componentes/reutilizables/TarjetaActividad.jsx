@@ -5,7 +5,7 @@ import BadgeEstado from './BadgeEstado';
 import Boton from './Boton';
 import { ESTADOS_ACTIVIDAD } from '../../constantes';
 
-function TarjetaActividad({ actividad, modo = 'voluntario', onActualizar, onEditar, onIniciar, onCompletar, ocultarBoton = false }) {
+function TarjetaActividad({ actividad, modo = 'voluntario', onActualizar, onEditar, onIniciar, onCompletar, onAbrir, ocultarBoton = false }) {
   const { usuario } = useAuth();
   const [postulando, setPostulando] = useState(false);
 
@@ -58,7 +58,10 @@ function TarjetaActividad({ actividad, modo = 'voluntario', onActualizar, onEdit
 
       {modo === 'ong' && (
         <div className="flex gap-2">
-          {actividad.estado === 'Cerrada' && (
+          {actividad.estado === 'Planificada' && (
+            <Boton variante="primario" onClick={() => onAbrir?.(actividad)}>Abrir inscripciones</Boton>
+          )}
+          {actividad.estado === 'Abierta' && (
             <Boton variante="primario" onClick={() => onIniciar?.(actividad)}>Iniciar</Boton>
           )}
           {actividad.estado === 'EnProgreso' && (

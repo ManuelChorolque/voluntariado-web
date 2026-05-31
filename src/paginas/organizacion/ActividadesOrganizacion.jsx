@@ -17,21 +17,28 @@ function ActividadesOrganizacion() {
   const [modalCrear, setModalCrear] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [detalleAct, setDetalleAct] = useState(null);
+  const [modalCancelar, setModalCancelar] = useState(false);
+  const [actividadCancelar, setActividadCancelar] = useState(null);
+  const [motivoCancelacion, setMotivoCancelacion] = useState('');
   const [enviando, setEnviando] = useState(false);
   const [formCrear, setFormCrear] = useState({
     nombre: '', descripcion: '', ubicacion: '',
-    fechaInicio: '', fechaFin: '', voluntariosRequeridos: 1
+    fechaInicio: '', fechaFin: '',
+    fechaInicioInscripcion: '', fechaFinInscripcion: '',
+    voluntariosRequeridos: 1
   });
   const [editandoAct, setEditandoAct] = useState(null);
   const [formEditar, setFormEditar] = useState({
     nombre: '', descripcion: '', ubicacion: '',
-    fechaInicio: '', fechaFin: '', voluntariosRequeridos: 1
+    fechaInicio: '', fechaFin: '',
+    fechaInicioInscripcion: '', fechaFinInscripcion: '',
+    voluntariosRequeridos: 1
   });
 
   const cargarDatos = useCallback(async () => {
     setCargando(true);
     try {
-      const params = {};
+      const params = { pageSize: 100 };
       if (busqueda) params.busquedaNombre = busqueda;
       if (fechaDesde) params.fechaDesde = new Date(fechaDesde).toISOString();
       if (fechaHasta) params.fechaHasta = new Date(fechaHasta).toISOString();
@@ -50,10 +57,12 @@ function ActividadesOrganizacion() {
         ...formCrear,
         organizacionId: usuario.organizacionId,
         fechaInicio: new Date(formCrear.fechaInicio).toISOString(),
-        fechaFin: new Date(formCrear.fechaFin).toISOString()
+        fechaFin: new Date(formCrear.fechaFin).toISOString(),
+        fechaInicioInscripcion: formCrear.fechaInicioInscripcion ? new Date(formCrear.fechaInicioInscripcion).toISOString() : null,
+        fechaFinInscripcion: formCrear.fechaFinInscripcion ? new Date(formCrear.fechaFinInscripcion).toISOString() : null
       });
       setModalCrear(false);
-      setFormCrear({ nombre: '', descripcion: '', ubicacion: '', fechaInicio: '', fechaFin: '', voluntariosRequeridos: 1 });
+      setFormCrear({ nombre: '', descripcion: '', ubicacion: '', fechaInicio: '', fechaFin: '', fechaInicioInscripcion: '', fechaFinInscripcion: '', voluntariosRequeridos: 1 });
       cargarDatos();
     } catch { alert('Error al crear actividad'); } finally { setEnviando(false); }
   };
@@ -66,6 +75,8 @@ function ActividadesOrganizacion() {
       ubicacion: actividad.ubicacion,
       fechaInicio: actividad.fechaInicio?.split('T')[0] || '',
       fechaFin: actividad.fechaFin?.split('T')[0] || '',
+      fechaInicioInscripcion: actividad.fechaInicioInscripcion?.split('T')[0] || '',
+      fechaFinInscripcion: actividad.fechaFinInscripcion?.split('T')[0] || '',
       voluntariosRequeridos: actividad.voluntariosRequeridos
     });
     setModalEditar(true);
@@ -78,7 +89,9 @@ function ActividadesOrganizacion() {
       await actividadesApi.actualizar(editandoAct.id, {
         ...formEditar,
         fechaInicio: new Date(formEditar.fechaInicio).toISOString(),
-        fechaFin: new Date(formEditar.fechaFin).toISOString()
+        fechaFin: new Date(formEditar.fechaFin).toISOString(),
+        fechaInicioInscripcion: formEditar.fechaInicioInscripcion ? new Date(formEditar.fechaInicioInscripcion).toISOString() : null,
+        fechaFinInscripcion: formEditar.fechaFinInscripcion ? new Date(formEditar.fechaFinInscripcion).toISOString() : null
       });
       setModalEditar(false);
       setEditandoAct(null);
@@ -102,15 +115,55 @@ function ActividadesOrganizacion() {
     }
   };
 
-  const cancelarActividad = async (actividad) => {
-    if (!confirm(`¿Cancelar la actividad "${actividad.nombre}"? Esta acción no se puede deshacer.`)) return;
+  const iniciarActividad = async (actividad) => {
+    if (!confirm(`¿Iniciar la actividad "${actividad.nombre}"? Los voluntarios ya no podrán postularse.`)) return;
     try {
-      await actividadesApi.cancelar(actividad.id);
+      await actividadesApi.iniciar(actividad.id);
+      setDetalleAct(null);
+      cargarDatos();
+    } catch (err) {
+      const msg = err.response?.data?.mensaje || 'Error al iniciar la actividad';
+      alert(msg);
+    }
+  };
+
+  const abrirActividad = async (actividad) => {
+    try {
+      await actividadesApi.abrir(actividad.id);
+      setDetalleAct(null);
+      cargarDatos();
+    } catch (err) {
+      const msg = err.response?.data?.mensaje || 'Error al abrir la actividad';
+      alert(msg);
+    }
+  };
+
+  const cancelarActividad = (actividad) => {
+    setActividadCancelar(actividad);
+    setMotivoCancelacion('');
+    setModalCancelar(true);
+  };
+
+  const confirmarCancelar = async () => {
+    if (!actividadCancelar) return;
+    setEnviando(true);
+    try {
+      await actividadesApi.cancelar(actividadCancelar.id, motivoCancelacion);
+      setModalCancelar(false);
+      setActividadCancelar(null);
+      setMotivoCancelacion('');
+      setDetalleAct(null);
       cargarDatos();
     } catch (err) {
       const msg = err.response?.data?.mensaje || 'Error al cancelar la actividad';
       alert(msg);
-    }
+    } finally { setEnviando(false); }
+  };
+
+  const limpiarFiltros = () => {
+    setBusqueda('');
+    setFechaDesde('');
+    setFechaHasta('');
   };
 
   const verDetalle = async (id) => {
@@ -149,7 +202,7 @@ function ActividadesOrganizacion() {
           <label className="text-xs font-semibold text-gray-700">Hasta</label>
           <input type="date" className="border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 min-w-[140px]" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} />
         </div>
-        <Boton variante="secundario" onClick={cargarDatos}>Buscar</Boton>
+        <Boton variante="secundario" onClick={limpiarFiltros}>Limpiar</Boton>
       </div>
 
       {/* Tabla */}
@@ -218,6 +271,16 @@ function ActividadesOrganizacion() {
             <input type="date" className={estiloInput} value={formCrear.fechaFin} onChange={(e) => setFormCrear({ ...formCrear, fechaFin: e.target.value })} required />
           </div>
         </div>
+        <div className="flex gap-3 mb-3.5">
+          <div className="flex-1">
+            <label className={estiloLabel}>Inicio inscripción</label>
+            <input type="date" className={estiloInput} value={formCrear.fechaInicioInscripcion} onChange={(e) => setFormCrear({ ...formCrear, fechaInicioInscripcion: e.target.value })} />
+          </div>
+          <div className="flex-1">
+            <label className={estiloLabel}>Fin inscripción</label>
+            <input type="date" className={estiloInput} value={formCrear.fechaFinInscripcion} onChange={(e) => setFormCrear({ ...formCrear, fechaFinInscripcion: e.target.value })} />
+          </div>
+        </div>
         <div className="mb-3.5">
           <label className={estiloLabel}>Voluntarios requeridos</label>
           <input type="number" min="1" className={estiloInput} value={formCrear.voluntariosRequeridos} onChange={(e) => setFormCrear({ ...formCrear, voluntariosRequeridos: Number(e.target.value) })} required />
@@ -248,11 +311,46 @@ function ActividadesOrganizacion() {
             <input type="date" className={estiloInput} value={formEditar.fechaFin} onChange={(e) => setFormEditar({ ...formEditar, fechaFin: e.target.value })} required />
           </div>
         </div>
+        <div className="flex gap-3 mb-3.5">
+          <div className="flex-1">
+            <label className={estiloLabel}>Inicio inscripción</label>
+            <input type="date" className={estiloInput} value={formEditar.fechaInicioInscripcion} onChange={(e) => setFormEditar({ ...formEditar, fechaInicioInscripcion: e.target.value })} />
+          </div>
+          <div className="flex-1">
+            <label className={estiloLabel}>Fin inscripción</label>
+            <input type="date" className={estiloInput} value={formEditar.fechaFinInscripcion} onChange={(e) => setFormEditar({ ...formEditar, fechaFinInscripcion: e.target.value })} />
+          </div>
+        </div>
         <div className="mb-3.5">
           <label className={estiloLabel}>Voluntarios requeridos</label>
           <input type="number" min="1" className={estiloInput} value={formEditar.voluntariosRequeridos} onChange={(e) => setFormEditar({ ...formEditar, voluntariosRequeridos: Number(e.target.value) })} required />
         </div>
       </ModalForm>
+
+      {/* Modal Cancelar */}
+      {modalCancelar && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => { if (!enviando) setModalCancelar(false); }}>
+          <div className="bg-white rounded-lg p-7 max-w-[480px] w-[90%] shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="m-0 mb-1 text-lg text-gray-900">Cancelar Actividad</h3>
+            <p className="m-0 mb-4 text-sm text-gray-500">
+              ¿Por qué cancelás la actividad <strong>{actividadCancelar?.nombre}</strong>?
+            </p>
+            <textarea
+              className="w-full px-3 py-2.5 border border-gray-300 rounded-md text-sm box-border min-h-[100px] outline-none focus:border-red-400 focus:ring-2 focus:ring-red-200"
+              placeholder="Describí el motivo de la cancelación..."
+              value={motivoCancelacion}
+              onChange={(e) => setMotivoCancelacion(e.target.value)}
+              autoFocus
+            />
+            <div className="flex gap-2.5 justify-end mt-5">
+              <Boton variante="secundario" onClick={() => setModalCancelar(false)} deshabilitado={enviando}>Volver</Boton>
+              <Boton variante="peligro" onClick={confirmarCancelar} deshabilitado={enviando}>
+                {enviando ? 'Cancelando...' : 'Confirmar Cancelación'}
+              </Boton>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal Detalle */}
       {detalleAct && (
@@ -275,6 +373,12 @@ function ActividadesOrganizacion() {
               <span><strong>Cupos:</strong> {detalleAct.voluntariosAsignados}/{detalleAct.voluntariosRequeridos}</span>
             </div>
 
+            {detalleAct.motivoCancelacion && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">
+                <strong>Motivo de cancelación:</strong> {detalleAct.motivoCancelacion}
+              </div>
+            )}
+
             <h4 className="m-0 mb-3 text-sm text-gray-900">
               Voluntarios asignados ({detalleAct.voluntarios?.length ?? 0})
             </h4>
@@ -293,6 +397,12 @@ function ActividadesOrganizacion() {
             )}
 
             <div className="mt-5 flex gap-2 justify-end">
+              {detalleAct.estado === 'Planificada' && (
+                <Boton variante="primario" onClick={() => abrirActividad(detalleAct)}>Abrir inscripciones</Boton>
+              )}
+              {detalleAct.estado === 'Abierta' && (
+                <Boton variante="primario" onClick={() => iniciarActividad(detalleAct)}>Iniciar</Boton>
+              )}
               {detalleAct.estado === 'EnProgreso' && (
                 <Boton variante="primario" onClick={() => completarActividad(detalleAct)}>Completar y generar certificados</Boton>
               )}

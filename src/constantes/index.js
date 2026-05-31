@@ -23,8 +23,7 @@ export const ESTADOS_ACTIVIDAD = {
   Abierta: { label: 'Abierta', color: '#22c55e' },
   EnProgreso: { label: 'En Progreso', color: '#3b82f6' },
   Completada: { label: 'Completada', color: '#8b5cf6' },
-  Cancelada: { label: 'Cancelada', color: '#ef4444' },
-  Cerrada: { label: 'Cerrada', color: '#f59e0b' }
+  Cancelada: { label: 'Cancelada', color: '#ef4444' }
 };
 
 export const MENSAJES = {

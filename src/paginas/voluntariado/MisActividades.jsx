@@ -37,6 +37,12 @@ function MisActividades() {
     });
   }, [actividades, busqueda, fechaDesde, fechaHasta]);
 
+  const limpiarFiltros = () => {
+    setBusqueda('');
+    setFechaDesde('');
+    setFechaHasta('');
+  };
+
   const verDetalle = async (id) => {
     try {
       const res = await actividadesApi.obtenerPorId(id);
@@ -70,6 +76,7 @@ function MisActividades() {
           <label className="text-xs font-semibold text-gray-700">Hasta</label>
           <input type="date" className="border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 min-w-[140px]" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} />
         </div>
+        <Boton variante="secundario" onClick={limpiarFiltros}>Limpiar</Boton>
       </div>
 
       {/* Tabla */}
@@ -130,6 +137,12 @@ function MisActividades() {
               <span><strong>Fin:</strong> {new Date(detalleAct.fechaFin).toLocaleDateString()}</span>
               <span><strong>Cupos:</strong> {detalleAct.voluntariosAsignados}/{detalleAct.voluntariosRequeridos}</span>
             </div>
+
+            {detalleAct.motivoCancelacion && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">
+                <strong>Motivo de cancelación:</strong> {detalleAct.motivoCancelacion}
+              </div>
+            )}
 
             <h4 className="m-0 mb-3 text-sm text-gray-900">
               Voluntarios asignados ({detalleAct.voluntarios?.length ?? 0})
